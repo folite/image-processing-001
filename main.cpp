@@ -5,6 +5,9 @@
 using namespace cv;
 using namespace std;
 
+Mat quantization(Mat, int);
+Mat resolution(Mat, int);
+
 int main(int argc, char* argv[]) {
   // 檢查是否有指定輸入影像檔案
   if ( argc != 4 ) {
@@ -17,42 +20,58 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  // namedWindow("Display Image", WINDOW_AUTOSIZE);
   imshow("Display Image", image_raw);
 
   image_new.create(image_raw.cols, image_raw.rows, CV_8UC1);
 
   if(strcmp(argv[2], "1") == 0){
-    int hire = atoi(argv[3]);
-    for(int i = 0; i < image_raw.cols; i++){
-      for(int j = 0; j < image_raw.rows; j++){
-        image_new.at<uchar>(i, j) = image_raw.at<uchar>(i, j) / (256 / hire) * (256 / hire);
-      }
-    }
+
+    imshow("quantization Image", quantization(image_raw, atoi(argv[3])));
+  
   }else if(strcmp(argv[2], "2") == 0){
-    int size = atoi(argv[3]), scale = 256 / size;
-    //縮小
-    for(int i = 0; i < size; i++){
-      for(int j = 0; j < size; j++){
-        int tmp = 0;
-        image_tmp.create(size, size, CV_8UC1);
-        for(int ni = i * scale; ni < (i + 1) * scale; ni++){
-          for(int nj = j * scale; nj < (j + 1) * scale; nj++){
-            tmp += image_raw.at<uchar>(ni, nj);
-          }
-        }
-        image_tmp.at<uchar>(i, j) = tmp / (scale * scale);
-      }
-    }
-    //放大
-    for(int i = 0; i < 256; i++){
-      for(int j = 0; j < 256; j++){
-        image_new.at<uchar>(i, j) = image_tmp.at<uchar>(i / scale, j / scale);
-      }
-    }
+
+    imshow("resolution Image", resolution(image_raw, atoi(argv[3])));
+
   }
   
-  imshow("Display Image2", image_new);
+  // imshow("Display Image2", image_new);
   waitKey(0);
   return 0;
+}
+
+Mat quantization(Mat raw, int res){
+  Mat image;
+  image.create(raw.cols, raw.rows, CV_8UC1);
+  for(int i = 0; i < raw.cols; i++){
+    for(int j = 0; j < raw.rows; j++){
+      image.at<uchar>(i, j) = raw.at<uchar>(i, j) / (256 / res) * (256 / res);
+    }
+  }
+  return image;
+}
+
+Mat resolution(Mat raw, int size){
+  Mat image, image_tmp;
+  image.create(raw.cols, raw.rows, CV_8UC1);
+  int scale = 256 / size, tmp;
+  //縮小
+  for(int i = 0; i < size; i++){
+    for(int j = 0; j < size; j++){
+      tmp = 0;
+      image_tmp.create(size, size, CV_8UC1);
+      for(int ni = i * scale; ni < (i + 1) * scale; ni++){
+        for(int nj = j * scale; nj < (j + 1) * scale; nj++){
+          tmp += raw.at<uchar>(ni, nj);
+        }
+      }
+      image_tmp.at<uchar>(i, j) = tmp / (scale * scale);
+    }
+  }
+  //放大
+  for(int i = 0; i < 256; i++){
+    for(int j = 0; j < 256; j++){
+      image.at<uchar>(i, j) = image_tmp.at<uchar>(i / scale, j / scale);
+    }
+  }
+  return image;
 }
