@@ -11,10 +11,10 @@ Mat resolution(Mat, int);
 int main(int argc, char* argv[]) {
   // 檢查是否有指定輸入影像檔案
   if ( argc != 4 ) {
-    printf("usage: DisplayImage.out <Image_Path>\n");
+    printf("usage: DisplayImage.out <Image_Path> <Mode> <select>\n");
     return -1;
   }
-  Mat image_raw = imread( argv[1], 0), image_new, image_tmp;
+  Mat image_raw = imread( argv[1], 0);
   if ( !image_raw.data ) {
     printf("No image data \n");
     return -1;
