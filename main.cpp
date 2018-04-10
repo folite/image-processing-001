@@ -20,9 +20,7 @@ int main(int argc, char* argv[]) {
     return -1;
   }
 
-  imshow("Display Image", image_raw);
-
-  image_new.create(image_raw.cols, image_raw.rows, CV_8UC1);
+  imshow("RAW Image", image_raw);
 
   if(strcmp(argv[2], "1") == 0){
 
