@@ -1,0 +1,3 @@
+/home/folite/Desktop/opencv/CMakeFiles/edit_cache.dir
+/home/folite/Desktop/opencv/CMakeFiles/rebuild_cache.dir
+/home/folite/Desktop/opencv/CMakeFiles/DisplayImage.dir
